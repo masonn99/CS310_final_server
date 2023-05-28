@@ -5,7 +5,7 @@ const { s3, s3_bucket_name } = require('./aws.js');
 async function getAssetInfo(assetid) {
   return new Promise((resolve, reject) => {
     const sql = 'SELECT userid, assetname, bucketkey FROM assets WHERE assetid = ?';
-    dbConnection.query(sql, [assetid], (error, results, fields) => {
+   dbConnection.query(sql, [assetid], (error, results, fields) => {
       if (error) {
         reject(error);
       } else {
@@ -15,9 +15,10 @@ async function getAssetInfo(assetid) {
             asset_name: results[0].assetname,
             bucket_key: results[0].bucketkey
           });
-        } else {
-          reject(new Error('No such asset'));
-        }
+        } 
+          else {
+              resolve(null);
+          }
       }
     });
   });
@@ -26,10 +27,18 @@ async function getAssetInfo(assetid) {
 exports.get_download = async (req, res) => {
   console.log('call to /download...');
   try {
+
     const assetid = req.params.assetid;
     console.log(`assetid: ${assetid}`);
-    const { user_id, asset_name, bucket_key } = await getAssetInfo(assetid);
-    console.log(`user_id: ${user_id}, asset_name: ${asset_name}, bucket_key: ${bucket_key}`);
+    const result = await getAssetInfo(assetid);
+      console.log(result);
+      if (result == null) {
+          console.log("No such asset");
+          res.status(200).json({"message":"no such asset...","user_id":-1,"asset_name":"?","bucket_key":"?","data":[]});
+      }
+      else {
+           const { user_id, asset_name, bucket_key } = result;
+          console.log(`user_id: ${user_id}, asset_name: ${asset_name}, bucket_key: ${bucket_key}`);
     const s3Result = await s3.send(new GetObjectCommand({
       Bucket: s3_bucket_name,
       Key: bucket_key
@@ -42,6 +51,8 @@ exports.get_download = async (req, res) => {
         "asset_name": asset_name,
         "bucket_key": bucket_key,
         data: datastr });
+      }
+    
   } catch (err) {
     console.log(`download() failed: ${err}`);
     res.status(500).json({
@@ -53,4 +64,3 @@ exports.get_download = async (req, res) => {
     });
   }
 }
-//commit
