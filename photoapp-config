@@ -1,8 +1,8 @@
 [s3]
-bucket_name = photoapp-mason-naung
+bucket_name = new-bucket-sample-bucket-509
 
 [rds]
-endpoint = nu-mason-310.cjrsvjnhjs0a.us-east-1.rds.amazonaws.com
+endpoint = team-alpha-sql.craxilw5gomz.us-east-1.rds.amazonaws.com
 port_number = 3306
 region_name = us-east-1d
 user_name = photoapp-read-write
@@ -11,10 +11,10 @@ db_name = photoapp
 
 [s3readonly]
 region_name = us-east-1
-aws_access_key_id = AKIA3GD52Z3MKKEF6MRL
-aws_secret_access_key = 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
+aws_access_key_id = AKIA5QQDDBGN67L7HMG4
+aws_secret_access_key = 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
 
 [s3readwrite]
 region_name = us-east-1
-aws_access_key_id = AKIA3GD52Z3MK2WKTRWX
-aws_secret_access_key = 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
+aws_access_key_id = AKIA5QQDDBGNVU33423L
+aws_secret_access_key = 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
