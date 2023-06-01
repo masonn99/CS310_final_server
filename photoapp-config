@@ -4,7 +4,7 @@ bucket_name = new-bucket-sample-bucket-509
 [rds]
 endpoint = team-alpha-sql.craxilw5gomz.us-east-1.rds.amazonaws.com
 port_number = 3306
-region_name = us-east-1d
+region_name = us-east-1a
 user_name = photoapp-read-write
 user_pwd = def456!!
 db_name = photoapp
