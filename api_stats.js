@@ -9,6 +9,7 @@ const { s3, s3_bucket_name, s3_region_name } = require('./aws.js');
 
 exports.get_stats = async (req, res) => {
 
+
   console.log("call to /stats...");
 
   try {

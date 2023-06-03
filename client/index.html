@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- 
+        This is an HTML comment
+        You can write text in a comment and the content won't be visible in the page
+    -->
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="https://glitch.com/favicon.ico" />
+
+    <!-- The website stylesheet -->
+    <link rel="stylesheet" href="./style.css" />
+
+    <title>Client for 310</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="column">
+        <div class="card">
+          <button id="stats">Stats</button>
+          <button id="users">Users</button>
+          <button id="assets">Assets</button>
+        </div>
+
+        <input type="file" id="imageInput" />
+        <button id="uploadButton">Upload</button>
+        <input type="number" id="userid" placeholder="userid" />
+
+      </div>
+
+      <div id="view" class="column">
+        <h2>Status View</h2>
+        <p id="statView"></p>
+        <table id="userT">
+          <thead>
+            <tr>
+              <th>UserId</th>
+              <th>Email</th>
+              <th>Lastname</th>
+              <th>Firstname</th>
+              <th>BucketFolder</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+
+        <hr>
+
+        <table id="assetT">
+          <thead>
+            <tr>
+              <th>AssetId</th>
+              <th>UserId</th>
+              <th>AssetName</th>
+              <th>BucketKey</th>
+              <th>Data Created</th>
+              <th>FileSize</th>
+              <th>ResWidth</th>
+              <th>ResHeight</th>
+              <th>Lat</th>
+              <th>Long</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+
+    <script src="clientscript.js"></script>
+  </body>
+</html>

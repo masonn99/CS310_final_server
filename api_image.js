@@ -6,7 +6,7 @@ const uuid = require('uuid');
 exports.post_image = async (req, res) => {
   console.log("call to /image...");
 
-  const { assetname, data } = req.body;
+  const { assetname, data,  datecreated, filesize, reswidth, resheight, locationlat,  locationlong } = req.body;
 
   try {
     dbConnection.query('SELECT bucketfolder FROM users WHERE userid = ?', [req.params.userid], async (error, result) => {
@@ -41,8 +41,8 @@ exports.post_image = async (req, res) => {
       try {
         await s3.send(new PutObjectCommand(putObjectParams));
 
-        const sql = 'INSERT INTO assets (assetid, userid, assetname, bucketkey) VALUES (?, ?, ?, ?)';
-        const values = [null, userId, assetname, s3Key];
+        const sql = 'INSERT INTO assets (assetid, userid, assetname, bucketkey, datecreated, filesize, reswidth, resheight, locationlat,  locationlong) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        const values = [null, userId, assetname, s3Key, datecreated, filesize, reswidth, resheight, locationlat,  locationlong];
 
         dbConnection.query(sql, values, (insertError, insertResult) => {
           if (insertError) {
