@@ -112,45 +112,68 @@ assets.addEventListener('click', () => {
 
 uploadButton.addEventListener('click', function () {
   console.log('upload image clicked')
-  var fileInput = document.getElementById('imageInput')
-  var file = fileInput.files[0]
-
-  var reader = new FileReader()
   var textField = document.getElementById('userid')
-
   if (textField.value === null) {
     console.log('empty user id')
     return
   }
 
+  var fileInput = document.getElementById('imageInput')
+  var file = fileInput.files[0]
+
+  //Init img data
+  var imgData = {
+    data: '',
+    assetname: file.name,
+    datecreated: formatDate(file.lastModifiedDate),
+    filesize: file.size,
+    reswidth: null,
+    resheight: null,
+    locationlat: 0,
+    locationlong: 0,
+  }
+
+  getImageSize(file)
+    .then((size) => {
+      imgData.reswidth = size.width
+      imgData.resheight = size.height
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+
+  getImageCoordinates(file)
+    .then((coordinates) => {
+      imgData.locationlat = coordinates.latitude
+      imgData.locationlong = coordinates.longitude
+    })
+    .catch((error) => {
+      //No GPS coordinates or other errors
+      console.error(error)
+    })
+
+  var reader = new FileReader()
   reader.onloadend = function () {
     var base64String = reader.result.split(',')[1] // Extract the Base64 string (remove the prefix)
-
     // Send the Base64 string to the REST API
-
-    sendImage(base64String, textField.value)
+    imgData.data = base64String
+    sendImage(imgData, textField.value)
   }
 
   reader.readAsDataURL(file)
 })
 
 //Using random test data
-function sendImage(base64String, userid) {
+function sendImage(imgData, userid) {
+  
+  console.log(imgData)
+  
   fetch('http://localhost:8080/image/' + userid, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      data: base64String,
-      assetname: 'ANp',
-      datecreated: '0000-00-00 00:00:00',
-      filesize: 30,
-      reswidth: 300,
-      resheight: 300,
-      locationlat: 0,
-      locationlong: 0,
-    }),
+    body: JSON.stringify(imgData),
   })
     .then((response) => {
       console.log(response)
