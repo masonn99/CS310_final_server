@@ -67,7 +67,7 @@ users.addEventListener('click', () => {
 })
 
 assets.addEventListener('click', () => {
-  console.log('clicked user')
+  console.log('clicked asset')
   fetch(
     'http://localhost:8080/assets',
     (headers = {
@@ -110,30 +110,35 @@ assets.addEventListener('click', () => {
     })
 })
 
-uploadButton.addEventListener('click', function () {
+uploadButton.addEventListener('click', async () => {
   console.log('upload image clicked')
+
   var textField = document.getElementById('userid')
   if (textField.value === null) {
     console.log('empty user id')
     return
   }
 
+  //Init img data
+  const imgData = {
+    data: '',
+    assetname: '',
+    datecreated: '0000-00-00 00:00:00',
+    filesize: null,
+    reswidth: null,
+    resheight: null,
+    locationlat: null,
+    locationlong: null,
+  }
+
   var fileInput = document.getElementById('imageInput')
   var file = fileInput.files[0]
 
-  //Init img data
-  var imgData = {
-    data: '',
-    assetname: file.name,
-    datecreated: formatDate(file.lastModifiedDate),
-    filesize: file.size,
-    reswidth: null,
-    resheight: null,
-    locationlat: 0,
-    locationlong: 0,
-  }
+  imgData.assetname = file.name
+  imgData.datecreated = formatDate(file.lastModifiedDate)
+  imgData.filesize = file.size
 
-  getImageSize(file)
+  await getImageSize(file)
     .then((size) => {
       imgData.reswidth = size.width
       imgData.resheight = size.height
@@ -142,7 +147,7 @@ uploadButton.addEventListener('click', function () {
       console.error(error)
     })
 
-  getImageCoordinates(file)
+  await getImageCoordinates(file)
     .then((coordinates) => {
       imgData.locationlat = coordinates.latitude
       imgData.locationlong = coordinates.longitude
@@ -165,13 +170,11 @@ uploadButton.addEventListener('click', function () {
 
 //Using random test data
 function sendImage(imgData, userid) {
-  
-  console.log(imgData)
-  
   fetch('http://localhost:8080/image/' + userid, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      // Add any additional headers required by your API
     },
     body: JSON.stringify(imgData),
   })
