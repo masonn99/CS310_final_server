@@ -6,7 +6,6 @@ const uuid = require('uuid')
 exports.post_image = async (req, res) => {
   console.log('call to /image...')
 
-  console.log(req.body)
 
   const {
     assetname,
