@@ -188,3 +188,44 @@ function sendImage(imgData, userid) {
       console.log(error)
     })
 }
+
+// add or update user
+addUserButton.addEventListener('click', async () => {
+    // get data from text boxes
+    const ids = ['userEmail', 'userLastName', 'userFirstName', 'userBucketFolder'];
+
+    // return early if user left any field empty
+    if (ids.some((elem) => document.getElementById(elem).value.length === 0)) {
+        alert('User info fields cannot be empty');
+        return;
+    }
+
+    const userData = {
+        email: document.getElementById(ids[0]).value,
+        lastname: document.getElementById(ids[1]).value,
+        firstname: document.getElementById(ids[2]).value,
+        bucketfolder: document.getElementById(ids[3]).value
+    };
+
+    // call /user with this data
+    fetch('http://localhost:8080/user', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+    })
+        .then(response => response.json())
+        .then(result => {
+            console.log('PUT request successful:', result);
+            alert(result.message + ' user successfully!');
+
+            // clear text boxes
+            for (let idx = 0; idx < ids.length; ++idx) {
+                document.getElementById(ids[idx]).value = '';
+            }
+        })
+        .catch(error => {
+            console.error('Error making PUT request:', error);
+        });
+})
