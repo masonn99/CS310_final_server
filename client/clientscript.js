@@ -229,3 +229,34 @@ addUserButton.addEventListener('click', async () => {
             console.error('Error making PUT request:', error);
         });
 })
+
+geocodeButton.addEventListener('click', async () => {
+    const apiKey = 'AIzaSyAr_wqIM1sFyl2oJnF1YvAhbkZmD8OoSuA'; // <-- see GeocodeAPIKey.txt
+    const address = 'near Evanston';
+
+    const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
+
+    fetch(geocodeUrl)
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'OK') {
+                const location = data.results[0].geometry.location;
+                const latitude = location.lat;
+                const longitude = location.lng;
+                console.log('Latitude:', latitude);
+                console.log('Longitude:', longitude);
+
+                const northeast = data.results[0].geometry.bounds.northeast;
+                const southwest = data.results[0].geometry.bounds.southwest;
+                const northeastText = 'Northeast bounds: ' + JSON.stringify(northeast)
+                const southwestText = 'Southwest bounds: ' + JSON.stringify(southwest)
+                document.getElementById('northeastSpan').textContent = northeastText;
+                document.getElementById('southwestSpan').textContent = southwestText;
+            } else {
+                console.error('Geocoding API request failed:', data.status);
+            }
+        })
+        .catch(error => {
+            console.error('Error making Geocoding API request:', error);
+        });
+})

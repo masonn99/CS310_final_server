@@ -1,0 +1,5 @@
+Travis's personal API key.
+Please limit using this key to this project because it is tied to my credit card.
+(don't worry, I'm using the free plan but it still needs a CC to signup)
+
+Google API key: AIzaSyAr_wqIM1sFyl2oJnF1YvAhbkZmD8OoSuA
