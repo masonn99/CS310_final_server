@@ -196,7 +196,7 @@ addUserButton.addEventListener('click', async () => {
 
     // return early if user left any field empty
     if (ids.some((elem) => document.getElementById(elem).value.length === 0)) {
-        alert('User info fields cannot be empty');
+        setUserSpanText('User info fields cannot be empty.');
         return;
     }
 
@@ -218,7 +218,8 @@ addUserButton.addEventListener('click', async () => {
         .then(response => response.json())
         .then(result => {
             console.log('PUT request successful:', result);
-            alert(result.message + ' user successfully!');
+            const text = `${result.message} user "${userData.email}" successfully!`;
+            setUserSpanText(text);
 
             // clear text boxes
             for (let idx = 0; idx < ids.length; ++idx) {
@@ -260,3 +261,7 @@ geocodeButton.addEventListener('click', async () => {
             console.error('Error making Geocoding API request:', error);
         });
 })
+
+function setUserSpanText(text) {
+    document.getElementById('addUserSpan').textContent = text;
+}
