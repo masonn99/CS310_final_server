@@ -34,16 +34,7 @@ users.addEventListener('click', () => {
     .then((response) => response.json())
     .then((data) => {
       var tableBody = document.getElementById('userT')
-
-      var rows = tableBody.getElementsByTagName('tr')
-
-      //reset table if occupied
-      if (rows.length > 1) {
-        console.log('resetting table')
-        for (var i = rows.length - 1; i > 0; i--) {
-          tableBody.removeChild(rows[i])
-        }
-      }
+      resetTable(tableBody);
 
       // Iterate over the JSON data
       data['data'].forEach(function (item) {
@@ -78,17 +69,8 @@ assets.addEventListener('click', () => {
     .then((data) => {
       var tableBody = document.getElementById('assetT')
 
-      var rows = tableBody.getElementsByTagName('tr')
-
       //reset table if occupied
-      if (rows.length > 1) {
-        console.log('resetting table')
-        for (var i = rows.length - 1; i > 0; i--) {
-          tableBody.removeChild(rows[i])
-        }
-      }
-
-      // console.log(data['data'])
+      resetTable(tableBody);
 
       data['data'].forEach(function (item) {
         // Create a new row
@@ -252,6 +234,8 @@ geocodeButton.addEventListener('click', async () => {
         const southwestText = 'Southwest bounds: ' + JSON.stringify(southwest)
         setNortheastSpanText(northeastText);
         setSouthwestSpanText(southwestText);
+
+        geocodeImages(northeast, southwest);
     } else {
         // get message (error or status) and set text
         const text = data.error_message ? data.error_message : data.status;
@@ -284,4 +268,30 @@ function setNortheastSpanText(text) {
 
 function setSouthwestSpanText(text) {
     document.getElementById('southwestSpan').textContent = text;
+}
+
+function resetTable(tableBody) {
+    const rows = tableBody.getElementsByTagName('tr')
+    if (rows.length > 1) {
+        console.log('resetting table')
+        for (let i = rows.length - 1; i > 0; i--) {
+            tableBody.removeChild(rows[i])
+        }
+    }
+}
+
+function geocodeImages(northeast, southwest) {
+    const url = `http://localhost:8080/geocode/${northeast.lat}/${northeast.lng}/${southwest.lat}/${southwest.lng}`;
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then((response) => {
+            console.log(response)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
 }
