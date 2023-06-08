@@ -2,6 +2,7 @@ const dbConnection = require('./database.js')
 const { PutObjectCommand } = require('@aws-sdk/client-s3')
 const { s3, s3_bucket_name, s3_region_name } = require('./aws.js')
 const uuid = require('uuid')
+const sharp = require("sharp")
 
 exports.post_image = async (req, res) => {
   console.log('call to /image...')
@@ -43,10 +44,15 @@ exports.post_image = async (req, res) => {
         const assetKey = uuid.v4()
         const s3Key = `${bucketFolder}/${assetKey}.jpg`
         const imageBuffer = Buffer.from(data, 'base64')
+        console.log(imageBuffer.byteLength)
+        const compressedBuffer = await sharp(imageBuffer)
+          .jpeg({ quality: 30 })
+          .toBuffer();
+        console.log(compressedBuffer.byteLength)
         const putObjectParams = {
           Bucket: s3_bucket_name,
           Key: s3Key,
-          Body: imageBuffer,
+          Body: compressedBuffer,
         }
 
         try {
