@@ -79,6 +79,8 @@ var download = require('./api_download.js');
 var user = require('./api_user.js');
 var image = require('./api_image.js');
 var geocode = require('./api_geocode.js');
+var bySize = require('./api_bySize.js');
+
 
 app.get('/stats', stats.get_stats);  //app.get('/stats', (req, res) => {...});
 app.get('/users', users.get_users);  //app.get('/users', (req, res) => {...});
@@ -88,3 +90,4 @@ app.get('/download/:assetid', download.get_download); //app.get('/download/:asse
 app.put('/user', user.put_user);
 app.post('/image/:userid', image.post_image);
 app.get('/geocode/:latNE/:longNE/:latSW/:longSW', geocode.geocode_images);
+app.post('/bySize', bySize.get_assets_by_size);
