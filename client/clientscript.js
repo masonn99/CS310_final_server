@@ -67,25 +67,7 @@ assets.addEventListener('click', () => {
   )
     .then((response) => response.json())
     .then((data) => {
-      var tableBody = document.getElementById('assetT')
-
-      //reset table if occupied
-      resetTable(tableBody);
-
-      data['data'].forEach(function (item) {
-        // Create a new row
-        var row = document.createElement('tr')
-
-        // Insert cells with values
-        Object.values(item).forEach(function (value) {
-          var cell = document.createElement('td')
-          cell.textContent = value
-          row.appendChild(cell)
-        })
-
-        // Append row to the table body
-        tableBody.appendChild(row)
-      })
+        createAssetTable(data);
     })
     .catch((error) => {
       console.error(error)
@@ -288,10 +270,30 @@ function geocodeImages(northeast, southwest) {
             'Content-Type': 'application/json'
         }
     })
-        .then((response) => {
-            console.log(response)
+        .then((response) => response.json())
+        .then((data) => {
+            createAssetTable(data);
         })
-        .catch((error) => {
-            console.log(error)
+}
+
+function createAssetTable(data) {
+    var tableBody = document.getElementById('assetT')
+
+    //reset table if occupied
+    resetTable(tableBody);
+
+    data['data'].forEach(function (item) {
+        // Create a new row
+        var row = document.createElement('tr')
+
+        // Insert cells with values
+        Object.values(item).forEach(function (value) {
+            var cell = document.createElement('td')
+            cell.textContent = value
+            row.appendChild(cell)
         })
+
+        // Append row to the table body
+        tableBody.appendChild(row)
+    })
 }
