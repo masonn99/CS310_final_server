@@ -21,10 +21,18 @@ async function getImagesFromGeocode(latNE, longNE, latSW, longSW) {
 exports.geocode_images = async (req, res) => {
     console.log('call to /geocode...');
     try {
-        const latNE  = parseFloat(req.params.latNE);
-        const longNE = parseFloat(req.params.longNE);
-        const latSW  = parseFloat(req.params.latSW);
-        const longSW = parseFloat(req.params.longSW);
+        let latNE  = parseFloat(req.params.latNE);
+        let longNE = parseFloat(req.params.longNE);
+        let latSW  = parseFloat(req.params.latSW);
+        let longSW = parseFloat(req.params.longSW);
+        if (longSW > longNE) {
+            // overflowed prime meridian, adjust to raw magnitude:
+            // - (180 - n) - 180 = -360 + n
+            longSW -= 360;
+            console.assert(longNE > longSW);
+        }
+        // note: probably need similar type of check for hemispheres, too
+
         const result = await getImagesFromGeocode(latNE, longNE, latSW, longSW);
 
         res.status(200).json({

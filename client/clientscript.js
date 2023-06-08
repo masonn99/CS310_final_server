@@ -77,6 +77,7 @@ assets.addEventListener('click', () => {
 
 uploadButton.addEventListener('click', async () => {
   console.log('upload image clicked')
+  setUploadSpanText('');
 
   var textField = document.getElementById('userid')
   if (!textField.value) {
@@ -129,6 +130,12 @@ uploadButton.addEventListener('click', async () => {
 
   var reader = new FileReader()
   reader.onloadend = function () {
+    if (!reader.result) {
+        // user likely deleted the file after choose the file but before clicking 'upload'
+        setUploadSpanText('Image cannot be found!');
+        return;
+    }
+    
     var base64String = reader.result.split(',')[1] // Extract the Base64 string (remove the prefix)
     // Send the Base64 string to the REST API
     imgData.data = base64String
@@ -148,14 +155,13 @@ function sendImage(imgData, userid) {
     },
     body: JSON.stringify(imgData),
   })
-    .then((response) => {
-      console.log(response)
-      //do sth with the response
-      var paragraph = document.getElementById('statView')
-      paragraph.innerHTML = 'Message ' + response['status']
+    .then(response => response.json())
+    .then(result => {
+      const text = `${result.message}! ID: ${result.assetid}`;
+      setStatViewText(text);
     })
     .catch((error) => {
-      console.log(error)
+      setStatViewText(error);
     })
 }
 
@@ -202,8 +208,12 @@ addUserButton.addEventListener('click', async () => {
 })
 
 geocodeButton.addEventListener('click', async () => {
+    setStatViewText('');
     const apiKey = 'AIzaSyAr_wqIM1sFyl2oJnF1YvAhbkZmD8OoSuA'; // <-- see GeocodeAPIKey.txt
-    const location = getGeocodeText();
+    let location = getGeocodeText();
+
+    // support "near me" queries (assume Evanston)
+    location = location.replace(/\bnear me\b/ig, 'near Evanston');
 
     const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location)}&key=${apiKey}`;
 
@@ -311,4 +321,8 @@ function setStatusViewText(text) {
 
 function setUploadSpanText(text) {
     document.getElementById('uploadSpan').textContent = text;
+}
+
+function setStatViewText(text) {
+    document.getElementById('statView').textContent = text;
 }
