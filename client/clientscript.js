@@ -68,6 +68,7 @@ assets.addEventListener('click', () => {
     .then((response) => response.json())
     .then((data) => {
         createAssetTable(data);
+        setStatusViewText('Status View');
     })
     .catch((error) => {
       console.error(error)
@@ -78,8 +79,8 @@ uploadButton.addEventListener('click', async () => {
   console.log('upload image clicked')
 
   var textField = document.getElementById('userid')
-  if (textField.value === null) {
-    console.log('empty user id')
+  if (!textField.value) {
+    setUploadSpanText('Empty user id!');
     return
   }
 
@@ -97,6 +98,11 @@ uploadButton.addEventListener('click', async () => {
 
   var fileInput = document.getElementById('imageInput')
   var file = fileInput.files[0]
+
+  if (!file) {
+    setUploadSpanText('No file selected!');
+    return;
+  }
 
   imgData.assetname = file.name
   imgData.datecreated = formatDate(file.lastModifiedDate)
@@ -218,6 +224,7 @@ geocodeButton.addEventListener('click', async () => {
         setSouthwestSpanText(southwestText);
 
         geocodeImages(northeast, southwest);
+        setStatusViewText(`Status View (filtering for ${location})`);
     } else {
         // get message (error or status) and set text
         const text = data.error_message ? data.error_message : data.status;
@@ -296,4 +303,12 @@ function createAssetTable(data) {
         // Append row to the table body
         tableBody.appendChild(row)
     })
+}
+
+function setStatusViewText(text) {
+    document.getElementById('StatusView').textContent = text;
+}
+
+function setUploadSpanText(text) {
+    document.getElementById('uploadSpan').textContent = text;
 }

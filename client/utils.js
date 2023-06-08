@@ -32,8 +32,18 @@ function getImageCoordinates(file) {
           const exifData = EXIF.getAllTags(this)
           const { GPSLatitude, GPSLongitude } = exifData
           if (GPSLatitude && GPSLongitude) {
-            const latitude = convertDMSToDD(GPSLatitude)
-            const longitude = convertDMSToDD(GPSLongitude)
+            let latitude = convertDMSToDD(GPSLatitude)
+            let longitude = convertDMSToDD(GPSLongitude)
+
+            // adjust positive/negative based on how google's geocoding api works
+            if (exifData.GPSLatitudeRef === 'S') {
+                latitude *= -1;
+            }
+
+            if (exifData.GPSLongitudeRef === 'W') {
+                longitude *= -1;
+            }
+
             resolve({ latitude, longitude })
           } else {
             reject(new Error('No GPS coordinates found in the image.'))

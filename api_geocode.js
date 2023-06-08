@@ -21,10 +21,10 @@ async function getImagesFromGeocode(latNE, longNE, latSW, longSW) {
 exports.geocode_images = async (req, res) => {
     console.log('call to /geocode...');
     try {
-        const latNE  = req.params.latNE;
-        const longNE = req.params.longNE;
-        const latSW  = req.params.latSW;
-        const longSW = req.params.longSW;
+        const latNE  = parseFloat(req.params.latNE);
+        const longNE = parseFloat(req.params.longNE);
+        const latSW  = parseFloat(req.params.latSW);
+        const longSW = parseFloat(req.params.longSW);
         const result = await getImagesFromGeocode(latNE, longNE, latSW, longSW);
 
         res.status(200).json({
