@@ -233,35 +233,55 @@ addUserButton.addEventListener('click', async () => {
 
 geocodeButton.addEventListener('click', async () => {
     const apiKey = 'AIzaSyAr_wqIM1sFyl2oJnF1YvAhbkZmD8OoSuA'; // <-- see GeocodeAPIKey.txt
-    const address = 'near Evanston';
+    const location = getGeocodeText();
 
-    const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
+    const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location)}&key=${apiKey}`;
 
-    fetch(geocodeUrl)
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'OK') {
-                const location = data.results[0].geometry.location;
-                const latitude = location.lat;
-                const longitude = location.lng;
-                console.log('Latitude:', latitude);
-                console.log('Longitude:', longitude);
+    const response = await fetch(geocodeUrl);
+    const data = await response.json();
+    if (data.status === 'OK') {
+        const geometry = data.results[0].geometry;
 
-                const northeast = data.results[0].geometry.bounds.northeast;
-                const southwest = data.results[0].geometry.bounds.southwest;
-                const northeastText = 'Northeast bounds: ' + JSON.stringify(northeast)
-                const southwestText = 'Southwest bounds: ' + JSON.stringify(southwest)
-                document.getElementById('northeastSpan').textContent = northeastText;
-                document.getElementById('southwestSpan').textContent = southwestText;
-            } else {
-                console.error('Geocoding API request failed:', data.status);
-            }
-        })
-        .catch(error => {
-            console.error('Error making Geocoding API request:', error);
-        });
+        // todo: look into why 'bounds' doesn't always exist (sometimes it is viewport)
+        // one way to trigger this is to search for 'sdf'
+        const boundsField = geometry.bounds ? 'bounds' : 'viewport';
+
+        const northeast = geometry[boundsField].northeast;
+        const southwest = geometry[boundsField].southwest;
+        const northeastText = 'Northeast bounds: ' + JSON.stringify(northeast)
+        const southwestText = 'Southwest bounds: ' + JSON.stringify(southwest)
+        setNortheastSpanText(northeastText);
+        setSouthwestSpanText(southwestText);
+    } else {
+        // get message (error or status) and set text
+        const text = data.error_message ? data.error_message : data.status;
+        setNortheastSpanText(text);
+        // this span is not needed for errors
+        setSouthwestSpanText('');
+    }
 })
+
+document.getElementById("geocodeInput")
+    .addEventListener("keyup", function (event) {
+        // set enter key on geocode input box to trigger click event
+        event.preventDefault();
+        if (event.key === 'Enter') {
+            document.getElementById("geocodeButton").click();
+        }
+    });
 
 function setUserSpanText(text) {
     document.getElementById('addUserSpan').textContent = text;
+}
+
+function getGeocodeText() {
+    return document.getElementById('geocodeInput').value;
+}
+
+function setNortheastSpanText(text) {
+    document.getElementById('northeastSpan').textContent = text;
+}
+
+function setSouthwestSpanText(text) {
+    document.getElementById('southwestSpan').textContent = text;
 }
