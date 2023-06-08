@@ -80,3 +80,14 @@ function formatDate(date) {
   const seconds = String(date.getSeconds()).padStart(2, '0')
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
 }
+
+function convertToMySQLDateTime(datetimeLocal) {
+  const datetimeParts = datetimeLocal.split('T');
+  const datePart = datetimeParts[0];
+  const timePart = datetimeParts[1];
+
+  const date = datePart.split('-').reverse().join('-');
+  const time = timePart.substring(0, 5);
+
+  return date + ' ' + time + ':00';
+}

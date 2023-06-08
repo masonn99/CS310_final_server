@@ -28,24 +28,28 @@
 
         <!-- add/update user section -->
         <div>
-            <br/>
-            <p>Add/update user:</p>
-            <input type="text" id="userEmail"        placeholder="email"       />
-            <input type="text" id="userLastName"     placeholder="lastname"    />
-            <input type="text" id="userFirstName"    placeholder="firstname"   />
-            <input type="text" id="userBucketFolder" placeholder="bucketfolder"/>
-            <button id="addUserButton">Add User</button>
-            <span id="addUserSpan"</span>
+          <br />
+          <p>Add/update user:</p>
+          <input type="text" id="userEmail" placeholder="email" />
+          <input type="text" id="userLastName" placeholder="lastname" />
+          <input type="text" id="userFirstName" placeholder="firstname" />
+          <input type="text" id="userBucketFolder" placeholder="bucketfolder" />
+          <button id="addUserButton">Add User</button>
+          <span id="addUserSpan"></span>
         </div>
         <div>
-            <br/>
-            <p>Google Geocode API:</p>
-            <input type="text" id="geocodeInput" placeholder='ex: "near Evanston"'/>
-            <button id="geocodeButton">Get Images!</button>
-            <br/>
-            <span id="northeastSpan"></span>
-            <br/>
-            <span id="southwestSpan"></span>
+          <br />
+          <p>Google Geocode API:</p>
+          <input
+            type="text"
+            id="geocodeInput"
+            placeholder='ex: "near Evanston"'
+          />
+          <button id="geocodeButton">Get Images!</button>
+          <br />
+          <span id="northeastSpan"></span>
+          <br />
+          <span id="southwestSpan"></span>
         </div>
 
         <div>
@@ -54,13 +58,16 @@
           <input type="number" id="fromSize" placeholder="from" />
           <input type="number" id="toSize" placeholder="to" />
           <button id="searchBySize">Search</button>
-
-
         </div>
 
+        <div>
+          <p>Search by date created</p>
+
+          <input type="datetime-local" id="fromDate" placeholder="from" />
+          <input type="datetime-local" id="toDate" placeholder="to" />
+          <button id="searchByDate">Search</button>
+        </div>
       </div>
-
-
 
       <div id="view" class="column">
         <h2 id="StatusView">Status View</h2>

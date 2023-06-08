@@ -23,6 +23,42 @@ stats.addEventListener('click', () => {
     })
 })
 
+searchByDate.addEventListener('click', () => {
+  console.log('clicked search by date')
+
+  var fromDate = document.getElementById('fromDate')
+  var toDate = document.getElementById('toDate')
+
+  // console.log(fromDate.value)
+  // console.log(convertToMySQLDateTime(fromDate.value))
+
+  if (!fromDate.value || !toDate.value) {
+    console.log('No date input')
+    return
+  }
+
+  const dRange = {
+    fromDate: convertToMySQLDateTime(fromDate.value),
+    toDate: convertToMySQLDateTime(toDate.value),
+  }
+
+  fetch('http://localhost:8080/byDate', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(dRange),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      createAssetTable(data)
+      setStatusViewText('Status View')
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+})
+
 searchBySize.addEventListener('click', () => {
   console.log('clicked search by size')
 
