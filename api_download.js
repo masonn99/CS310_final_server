@@ -1,6 +1,7 @@
 const dbConnection = require('./database.js')
 const { GetObjectCommand } = require('@aws-sdk/client-s3');
 const { s3, s3_bucket_name } = require('./aws.js');
+const sharp = require("sharp");
 
 async function getAssetInfo(assetid) {
   return new Promise((resolve, reject) => {
@@ -44,6 +45,12 @@ exports.get_download = async (req, res) => {
       Key: bucket_key
     }));
     const datastr = await s3Result.Body.transformToString('base64');
+    const imageBuffer = Buffer.from(datastr, 'base64')
+    console.log(imageBuffer.byteLength)
+    const compressedBuffer = await sharp(imageBuffer)
+      .jpeg({ quality: 100})
+      .toBuffer();
+    console.log(compressedBuffer.byteLength)
     console.log(`Downloaded from S3 and saved as '${asset_name}'`);
     res.status(200).json({ 
         "message": "success",
