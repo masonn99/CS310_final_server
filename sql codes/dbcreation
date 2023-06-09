@@ -1,8 +1,10 @@
-
+-- drop database photoapp;
+-- create database photoapp;
 USE photoapp;
 
 DROP TABLE IF EXISTS assets;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS metadata;
 
 CREATE TABLE users
 (
@@ -25,13 +27,6 @@ CREATE TABLE assets
     assetname    varchar(128) not null,  -- original name from user
     bucketkey    varchar(128) not null,  -- random, unique name in bucket
     
-
-    filesize     int,
-    reswidth     int,
-    resheight    int,
-    locationlat decimal(10, 8),
-    locationlong decimal(11, 8),
-    
     PRIMARY KEY (assetid),
     FOREIGN KEY (userid) REFERENCES users(userid),
     UNIQUE      (bucketkey)
@@ -39,6 +34,16 @@ CREATE TABLE assets
 
 ALTER TABLE assets AUTO_INCREMENT = 1001;  -- starting value
 
---
--- DONE
---
+create table metadata
+(
+    metadataid   int not null AUTO_INCREMENT,
+    assetid      int not null,
+    filesize     int,
+    reswidth     int,
+    resheight    int,
+    locationlat  decimal(10, 8),
+    locationlong decimal(11, 8),
+
+    primary key (metadataid),
+    foreign key (assetid) references assets(assetid)
+);

@@ -4,7 +4,11 @@ exports.get_assets = async (req, res) => {
 
   console.log("call to /assets...");
  try {
-  var sql = "SELECT * FROM assets ORDER BY assetid";
+     var sql = `select assets.assetid, assets.userid, assets.assetname, assets.bucketkey,
+         metadata.filesize, metadata.reswidth, metadata.resheight,
+         metadata.locationlat, metadata.locationlong
+         from assets, metadata
+         where metadata.assetid = assets.assetid`;
     dbConnection.query(sql, function (err, result) {
       if (err) throw err;
       console.log(result);

@@ -71,8 +71,8 @@ searchBySize.addEventListener('click', () => {
   }
 
   const sRange = {
-    fromSize: fromSize.value * 1024,
-    toSize: toSize.value * 1024,
+    fromSize: fromSize.value * 1000, // 1024 is correct but 1000 makes the math easier for end-users
+    toSize: toSize.value * 1000,
   }
 
   fetch('http://localhost:8080/bySize', {

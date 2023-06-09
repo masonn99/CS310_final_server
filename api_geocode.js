@@ -3,11 +3,15 @@ const dbConnection = require('./database.js')
 async function getImagesFromGeocode(latNE, longNE, latSW, longSW) {
     return new Promise((resolve, reject) => {
         // get images within geocode's rect
-        const sql = `select * from assets
-                     where locationlat <= ?
-                     and locationlat >= ?
-                     and locationlong <= ?
-                     and locationlong >= ?`
+        const sql = `select assets.assetid, assets.userid, assets.assetname, assets.bucketkey,
+         metadata.filesize, metadata.reswidth, metadata.resheight,
+         metadata.locationlat, metadata.locationlong
+         from assets, metadata
+         where metadata.assetid = assets.assetid
+         and locationlat <= ?
+         and locationlat >= ?
+         and locationlong <= ?
+         and locationlong >= ?;`;
         dbConnection.query(sql, [latNE, latSW, longNE, longSW], (error, results, fields) => {
             if (error) {
                 reject(error);
