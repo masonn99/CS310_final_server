@@ -62,17 +62,25 @@ searchByDate.addEventListener('click', () => {
 searchBySize.addEventListener('click', () => {
   console.log('clicked search by size')
 
-  var fromSize = document.getElementById('fromSize')
-  var toSize = document.getElementById('toSize')
+  const fromSize = parseInt(document.getElementById('fromSize').value)
+  const toSize =   parseInt(document.getElementById('toSize').value)
 
-  if (!fromSize.value || !toSize.value) {
-    console.log('No size input')
+  if (isNaN(fromSize) || isNaN(toSize)) {
+    setSizeSpanText('Sizes are required!');
     return
   }
 
+  if (fromSize > toSize) {
+    setSizeSpanText('"From" must be less than "To"');
+    return;
+  } else if (fromSize < 0 || toSize < 0) {
+    setSizeSpanText('Sizes must be positive!');
+    return;
+  }
+
   const sRange = {
-    fromSize: fromSize.value * 1000, // 1024 is correct but 1000 makes the math easier for end-users
-    toSize: toSize.value * 1000,
+    fromSize: fromSize * 1000, // 1024 is correct but 1000 makes the math easier for end-users
+    toSize: toSize * 1000,
   }
 
   fetch('http://localhost:8080/bySize', {
@@ -85,7 +93,7 @@ searchBySize.addEventListener('click', () => {
     .then((response) => response.json())
     .then((data) => {
       createAssetTable(data)
-      setStatusViewText('Status View')
+      setStatusViewText(`Status View (filtering for ${fromSize} KB to ${toSize} KB)`)
     })
     .catch((error) => {
       console.error(error)
@@ -429,11 +437,11 @@ document
 
 
 function getDownloadImageText() {
-    return document.getElementById('downloadImageText').value
+    return document.getElementById('downloadImageText').value;
 }
 
 function setDownloadStatus(text) {
-    document.getElementById('downloadStatus').textContent = text
+    document.getElementById('downloadStatus').textContent = text;
 }
 
 function downloadImageFromBase64(base64String, fileName) {
@@ -460,4 +468,8 @@ function downloadImageFromBase64(base64String, fileName) {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+}
+
+function setSizeSpanText(text) {
+    document.getElementById('sizeSpan').textContent = text;
 }
