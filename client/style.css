@@ -80,4 +80,6 @@ body {
     background-color: green;
   }
 
-  
+  #byDate{
+    display: none;
+  }
