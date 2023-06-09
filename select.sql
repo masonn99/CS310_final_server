@@ -1,5 +1,7 @@
 use photoapp;
 
+show columns from metadata
+/*
 select assets.assetid, assets.userid, assets.assetname, assets.bucketkey,
          metadata.filesize, metadata.reswidth, metadata.resheight,
          metadata.locationlat, metadata.locationlong, metadata.datecreated
@@ -18,3 +20,5 @@ where metadata.assetid = assets.assetid
 -- where locationlat > 41.9 and locationlong < 0;
 -- select * from users;
 
+-- example Elastic Beanstalk URL:
+-- http://team-alpha-eb-web-service-env.eba-4jssbesn.us-east-2.elasticbeanstalk.com/download/1001
