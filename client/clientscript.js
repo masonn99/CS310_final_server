@@ -3,7 +3,7 @@
 stats.addEventListener('click', () => {
   console.log('clicked stat')
   fetch(
-    'http://localhost:8080/stats',
+    'http://team-alpha-eb-web-service-env.eba-4jssbesn.us-east-2.elasticbeanstalk.com/stats',
     (headers = {
       'Content-Type': 'application/json',
     }),
@@ -39,7 +39,7 @@ searchByDate.addEventListener('click', () => {
     toDate: toDate.value,
   }
 
-  fetch('http://localhost:8080/byDate', {
+  fetch('http://team-alpha-eb-web-service-env.eba-4jssbesn.us-east-2.elasticbeanstalk.com/byDate', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ searchBySize.addEventListener('click', () => {
     toSize: toSize * 1000,
   }
 
-  fetch('http://localhost:8080/bySize', {
+  fetch('http://team-alpha-eb-web-service-env.eba-4jssbesn.us-east-2.elasticbeanstalk.com/bySize', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -102,7 +102,7 @@ searchBySize.addEventListener('click', () => {
 users.addEventListener('click', () => {
   console.log('clicked user')
   fetch(
-    'http://localhost:8080/users',
+    'http://team-alpha-eb-web-service-env.eba-4jssbesn.us-east-2.elasticbeanstalk.com/users',
     (headers = {
       'Content-Type': 'application/json',
     }),
@@ -136,7 +136,7 @@ users.addEventListener('click', () => {
 assets.addEventListener('click', () => {
   console.log('clicked asset')
   fetch(
-    'http://localhost:8080/assets',
+    'http://team-alpha-eb-web-service-env.eba-4jssbesn.us-east-2.elasticbeanstalk.com/assets',
     (headers = {
       'Content-Type': 'application/json',
     }),
@@ -224,7 +224,7 @@ uploadButton.addEventListener('click', async () => {
 
 //Using random test data
 function sendImage(imgData, userid) {
-  fetch('http://localhost:8080/image/' + userid, {
+  fetch('http://team-alpha-eb-web-service-env.eba-4jssbesn.us-east-2.elasticbeanstalk.com/image/' + userid, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -260,7 +260,7 @@ addUserButton.addEventListener('click', async () => {
   }
 
   // call /user with this data
-  fetch('http://localhost:8080/user', {
+  fetch('http://team-alpha-eb-web-service-env.eba-4jssbesn.us-east-2.elasticbeanstalk.com/user', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -359,7 +359,7 @@ function resetTable(tableBody) {
 }
 
 function geocodeImages(northeast, southwest) {
-  const url = `http://localhost:8080/geocode/${northeast.lat}/${northeast.lng}/${southwest.lat}/${southwest.lng}`
+  const url = `http://team-alpha-eb-web-service-env.eba-4jssbesn.us-east-2.elasticbeanstalk.com/geocode/${northeast.lat}/${northeast.lng}/${southwest.lat}/${southwest.lng}`
   fetch(url, {
     method: 'GET',
     headers: {
@@ -412,7 +412,7 @@ downloadImageButton.addEventListener('click', async () => {
     setDownloadStatus('Enter asset id to start!')
     return
   }
-  const url = `http://localhost:8080/download/${assetid}`
+  const url = `http://team-alpha-eb-web-service-env.eba-4jssbesn.us-east-2.elasticbeanstalk.com/download/${assetid}`
   const response = await fetch(url)
   const data = await response.json()
   if (data.message === 'success') {
