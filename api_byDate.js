@@ -10,8 +10,11 @@ exports.get_assets_by_date = async (req, res) => {
   console.log(toDate)
 
   try {
-    var sql =
-      'SELECT * FROM assets WHERE datecreated BETWEEN ? AND ? ORDER BY datecreated'
+    var sql =`select assets.assetid, assets.userid, assets.assetname, assets.bucketkey,
+    metadata.filesize, metadata.reswidth, metadata.resheight,
+    metadata.locationlat, metadata.locationlong, metadata.datecreated from assets, metadata
+    where metadata.assetid = assets.assetid
+    and metadata.datecreated BETWEEN ? AND ? ORDER BY metadata.datecreated`;
 
     const values = [fromDate, toDate]
     dbConnection.query(sql, values, function (err, result) {

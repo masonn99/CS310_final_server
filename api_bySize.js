@@ -12,7 +12,7 @@ exports.get_assets_by_size = async (req, res) => {
     try {
         var sql = `select assets.assetid, assets.userid, assets.assetname, assets.bucketkey,
                 metadata.filesize, metadata.reswidth, metadata.resheight,
-                metadata.locationlat, metadata.locationlong from assets, metadata
+                metadata.locationlat, metadata.locationlong, metadata.datecreated from assets, metadata
                 where metadata.assetid = assets.assetid
                 and metadata.filesize BETWEEN ? AND ? ORDER BY metadata.filesize`;
 

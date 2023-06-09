@@ -6,7 +6,7 @@ exports.get_assets = async (req, res) => {
  try {
      var sql = `select assets.assetid, assets.userid, assets.assetname, assets.bucketkey,
          metadata.filesize, metadata.reswidth, metadata.resheight,
-         metadata.locationlat, metadata.locationlong
+         metadata.locationlat, metadata.locationlong, metadata.datecreated
          from assets, metadata
          where metadata.assetid = assets.assetid`;
     dbConnection.query(sql, function (err, result) {

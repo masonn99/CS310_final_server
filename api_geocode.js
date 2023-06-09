@@ -5,7 +5,7 @@ async function getImagesFromGeocode(latNE, longNE, latSW, longSW) {
         // get images within geocode's rect
         const sql = `select assets.assetid, assets.userid, assets.assetname, assets.bucketkey,
          metadata.filesize, metadata.reswidth, metadata.resheight,
-         metadata.locationlat, metadata.locationlong
+         metadata.locationlat, metadata.locationlong, metadata.datecreated
          from assets, metadata
          where metadata.assetid = assets.assetid
          and locationlat <= ?

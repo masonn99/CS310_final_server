@@ -29,17 +29,14 @@ searchByDate.addEventListener('click', () => {
   var fromDate = document.getElementById('fromDate')
   var toDate = document.getElementById('toDate')
 
-  // console.log(fromDate.value)
-  // console.log(convertToMySQLDateTime(fromDate.value))
-
   if (!fromDate.value || !toDate.value) {
     console.log('No date input')
     return
   }
 
   const dRange = {
-    fromDate: convertToMySQLDateTime(fromDate.value),
-    toDate: convertToMySQLDateTime(toDate.value),
+    fromDate: fromDate.value,
+    toDate: toDate.value,
   }
 
   fetch('http://localhost:8080/byDate', {
@@ -63,19 +60,19 @@ searchBySize.addEventListener('click', () => {
   console.log('clicked search by size')
 
   const fromSize = parseInt(document.getElementById('fromSize').value)
-  const toSize =   parseInt(document.getElementById('toSize').value)
+  const toSize = parseInt(document.getElementById('toSize').value)
 
   if (isNaN(fromSize) || isNaN(toSize)) {
-    setSizeSpanText('Sizes are required!');
+    setSizeSpanText('Sizes are required!')
     return
   }
 
   if (fromSize > toSize) {
-    setSizeSpanText('"From" must be less than "To"');
-    return;
+    setSizeSpanText('"From" must be less than "To"')
+    return
   } else if (fromSize < 0 || toSize < 0) {
-    setSizeSpanText('Sizes must be positive!');
-    return;
+    setSizeSpanText('Sizes must be positive!')
+    return
   }
 
   const sRange = {
@@ -93,7 +90,9 @@ searchBySize.addEventListener('click', () => {
     .then((response) => response.json())
     .then((data) => {
       createAssetTable(data)
-      setStatusViewText(`Status View (filtering for ${fromSize} KB to ${toSize} KB)`)
+      setStatusViewText(
+        `Status View (filtering for ${fromSize} KB to ${toSize} KB)`,
+      )
     })
     .catch((error) => {
       console.error(error)
@@ -166,7 +165,7 @@ uploadButton.addEventListener('click', async () => {
   const imgData = {
     data: '',
     assetname: '',
-    datecreated: '0000-00-00 00:00:00',
+    datecreated: '0000-00-00',
     filesize: null,
     reswidth: null,
     resheight: null,
@@ -184,6 +183,7 @@ uploadButton.addEventListener('click', async () => {
 
   imgData.assetname = file.name
   imgData.datecreated = formatDate(file.lastModifiedDate)
+
   imgData.filesize = file.size
 
   await getImageSize(file)
@@ -256,7 +256,7 @@ addUserButton.addEventListener('click', async () => {
   const userData = {
     email: document.getElementById(ids[0]).value,
     lastname: document.getElementById(ids[1]).value,
-    firstname: document.getElementById(ids[2]).value
+    firstname: document.getElementById(ids[2]).value,
   }
 
   // call /user with this data
@@ -407,69 +407,68 @@ function setStatViewText(text) {
 }
 
 downloadImageButton.addEventListener('click', async () => {
-    const assetid = getDownloadImageText();
-    if (!assetid) {
-        setDownloadStatus('Enter asset id to start!');
-        return;
-    }
-    const url = `http://localhost:8080/download/${assetid}`
-    const response = await fetch(url)
-    const data = await response.json()
-    if (data.message === 'success') {
-        const assetName = data.asset_name;
-        const base64str = data.data;
-        downloadImageFromBase64(base64str, assetName);
-    } else {
-        setDownloadStatus(data.message);
-    }
+  const assetid = getDownloadImageText()
+  if (!assetid) {
+    setDownloadStatus('Enter asset id to start!')
+    return
+  }
+  const url = `http://localhost:8080/download/${assetid}`
+  const response = await fetch(url)
+  const data = await response.json()
+  if (data.message === 'success') {
+    const assetName = data.asset_name
+    const base64str = data.data
+    downloadImageFromBase64(base64str, assetName)
+  } else {
+    setDownloadStatus(data.message)
+  }
 })
 
 // trigger download button on enter key
 document
-    .getElementById('downloadImageText')
-    .addEventListener('keyup', function (event) {
-        // set enter key on geocode input box to trigger click event
-        event.preventDefault()
-        if (event.key === 'Enter') {
-            document.getElementById('downloadImageButton').click()
-        }
-    })
-
+  .getElementById('downloadImageText')
+  .addEventListener('keyup', function (event) {
+    // set enter key on geocode input box to trigger click event
+    event.preventDefault()
+    if (event.key === 'Enter') {
+      document.getElementById('downloadImageButton').click()
+    }
+  })
 
 function getDownloadImageText() {
-    return document.getElementById('downloadImageText').value;
+  return document.getElementById('downloadImageText').value
 }
 
 function setDownloadStatus(text) {
-    document.getElementById('downloadStatus').textContent = text;
+  document.getElementById('downloadStatus').textContent = text
 }
 
 function downloadImageFromBase64(base64String, fileName) {
-    // convert the Base64 string to a Blob object
-    const byteCharacters = atob(base64String);
-    const byteArrays = [];
-    for (let offset = 0; offset < byteCharacters.length; offset += 1024) {
-        const slice = byteCharacters.slice(offset, offset + 1024);
-        const byteNumbers = new Array(slice.length);
-        for (let i = 0; i < slice.length; i++) {
-            byteNumbers[i] = slice.charCodeAt(i);
-        }
-        const byteArray = new Uint8Array(byteNumbers);
-        byteArrays.push(byteArray);
+  // convert the Base64 string to a Blob object
+  const byteCharacters = atob(base64String)
+  const byteArrays = []
+  for (let offset = 0; offset < byteCharacters.length; offset += 1024) {
+    const slice = byteCharacters.slice(offset, offset + 1024)
+    const byteNumbers = new Array(slice.length)
+    for (let i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i)
     }
-    const blob = new Blob(byteArrays, { type: 'image/png' }); // Adjust the image type if needed
+    const byteArray = new Uint8Array(byteNumbers)
+    byteArrays.push(byteArray)
+  }
+  const blob = new Blob(byteArrays, { type: 'image/png' }) // Adjust the image type if needed
 
-    // create a temporary link element to trigger the download
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = fileName;
+  // create a temporary link element to trigger the download
+  const link = document.createElement('a')
+  link.href = URL.createObjectURL(blob)
+  link.download = fileName
 
-    // programmatically click the link to trigger the download
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  // programmatically click the link to trigger the download
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
 }
 
 function setSizeSpanText(text) {
-    document.getElementById('sizeSpan').textContent = text;
+  document.getElementById('sizeSpan').textContent = text
 }
