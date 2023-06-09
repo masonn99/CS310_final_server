@@ -397,3 +397,67 @@ function setUploadSpanText(text) {
 function setStatViewText(text) {
   document.getElementById('statView').textContent = text
 }
+
+downloadImageButton.addEventListener('click', async () => {
+    const assetid = getDownloadImageText();
+    if (!assetid) {
+        setDownloadStatus('Enter asset id to start!');
+        return;
+    }
+    const url = `http://localhost:8080/download/${assetid}`
+    const response = await fetch(url)
+    const data = await response.json()
+    if (data.message === 'success') {
+        const assetName = data.asset_name;
+        const base64str = data.data;
+        downloadImageFromBase64(base64str, assetName);
+    } else {
+        setDownloadStatus(data.message);
+    }
+})
+
+// trigger download button on enter key
+document
+    .getElementById('downloadImageText')
+    .addEventListener('keyup', function (event) {
+        // set enter key on geocode input box to trigger click event
+        event.preventDefault()
+        if (event.key === 'Enter') {
+            document.getElementById('downloadImageButton').click()
+        }
+    })
+
+
+function getDownloadImageText() {
+    return document.getElementById('downloadImageText').value
+}
+
+function setDownloadStatus(text) {
+    document.getElementById('downloadStatus').textContent = text
+}
+
+function downloadImageFromBase64(base64String, fileName) {
+    // convert the Base64 string to a Blob object
+    const byteCharacters = atob(base64String);
+    const byteArrays = [];
+    for (let offset = 0; offset < byteCharacters.length; offset += 1024) {
+        const slice = byteCharacters.slice(offset, offset + 1024);
+        const byteNumbers = new Array(slice.length);
+        for (let i = 0; i < slice.length; i++) {
+            byteNumbers[i] = slice.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        byteArrays.push(byteArray);
+    }
+    const blob = new Blob(byteArrays, { type: 'image/png' }); // Adjust the image type if needed
+
+    // create a temporary link element to trigger the download
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+
+    // programmatically click the link to trigger the download
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}

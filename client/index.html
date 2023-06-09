@@ -52,7 +52,7 @@
         </div>
 
         <div>
-          <p>Search by image size (in KB)</p>
+          <p>Search by image size (in KB):</p>
 
           <input type="number" id="fromSize" placeholder="from" />
           <input type="number" id="toSize" placeholder="to" />
@@ -60,11 +60,18 @@
         </div>
 
         <div id="byDate">
-          <p>Search by date created</p>
+          <p>Search by date created:</p>
 
           <input type="datetime-local" id="fromDate" placeholder="from" />
           <input type="datetime-local" id="toDate" placeholder="to" />
           <button id="searchByDate">Search</button>
+        </div>
+
+        <div>
+            <p>Download image:</p>
+            <input type="number" id="downloadImageText" placeholder="assetID" />
+            <button id="downloadImageButton">Download!</button>
+            <span id="downloadStatus"></span>
         </div>
       </div>
 
