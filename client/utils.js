@@ -31,9 +31,11 @@ function getImageCoordinates(file) {
         EXIF.getData(img, function () {
           const exifData = EXIF.getAllTags(this)
           const { GPSLatitude, GPSLongitude } = exifData
+          let latitude = null
+          let longitude = null
           if (GPSLatitude && GPSLongitude) {
-            let latitude = convertDMSToDD(GPSLatitude)
-            let longitude = convertDMSToDD(GPSLongitude)
+             latitude = convertDMSToDD(GPSLatitude)
+             longitude = convertDMSToDD(GPSLongitude)
 
             // adjust positive/negative based on how google's geocoding api works
             if (exifData.GPSLatitudeRef === 'S') {
@@ -46,7 +48,9 @@ function getImageCoordinates(file) {
 
             resolve({ latitude, longitude })
           } else {
-            reject(new Error('No GPS coordinates found in the image.'))
+            console.log("no gps")
+            resolve({ latitude, longitude })
+            //reject(new Error('No GPS coordinates found in the image.'))
           }
         })
       }
