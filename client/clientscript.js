@@ -237,7 +237,7 @@ function sendImage(imgData, userid) {
 // add or update user
 addUserButton.addEventListener('click', async () => {
   // get data from text boxes
-  const ids = ['userEmail', 'userLastName', 'userFirstName', 'userBucketFolder']
+  const ids = ['userEmail', 'userLastName', 'userFirstName']
 
   // return early if user left any field empty
   if (ids.some((elem) => document.getElementById(elem).value.length === 0)) {
@@ -248,8 +248,7 @@ addUserButton.addEventListener('click', async () => {
   const userData = {
     email: document.getElementById(ids[0]).value,
     lastname: document.getElementById(ids[1]).value,
-    firstname: document.getElementById(ids[2]).value,
-    bucketfolder: document.getElementById(ids[3]).value,
+    firstname: document.getElementById(ids[2]).value
   }
 
   // call /user with this data

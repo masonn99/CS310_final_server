@@ -9,6 +9,7 @@
 const dbConnection = require('./database.js')
 const express = require('express')
 const app = express()
+var crypto = require('crypto');
 
 app.use(express.json({ strict: false }))
 
@@ -74,8 +75,9 @@ exports.put_user = async (req, res) => {
     var data = req.body // data => JS object
 
     console.log(data)
-    const { email, lastname, firstname, bucketfolder } = req.body
+    const { email, lastname, firstname } = req.body
     const user = await getUserByEmail(email)
+    const bucketfolder = crypto.randomUUID();
 
     if (user !== null) {
       await updateUser(user.userid, lastname, firstname, bucketfolder)
