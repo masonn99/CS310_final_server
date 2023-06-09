@@ -1,8 +1,8 @@
 {
-  "name": "project-02-server-masonnaung",
+  "name": "nodejs",
   "version": "1.0.0",
   "description": "",
-  "main": "api_assets.js",
+  "main": "app.js",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.327.0",
     "@aws-sdk/credential-providers": "^3.327.0",
@@ -68,6 +68,8 @@
     "mime-types": "^2.1.35",
     "ms": "^2.0.0",
     "mysql": "^2.18.1",
+    "@types/node": "^18.0.6",
+
     "negotiator": "^0.6.3",
     "node-domexception": "^1.0.0",
     "node-fetch": "^3.3.0",
@@ -113,15 +115,13 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/masonn99/Project-02-server-MasonNaung.git"
-  },
+
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/masonn99/Project-02-server-MasonNaung/issues"
-  },
-  "homepage": "https://github.com/masonn99/Project-02-server-MasonNaung#readme"
+
+  "engines": {
+    "node": "18.12.1",
+    "npm": "8.19.2"
+  }
 }
