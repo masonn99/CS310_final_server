@@ -407,6 +407,7 @@ function setStatViewText(text) {
 }
 
 downloadImageButton.addEventListener('click', async () => {
+  setDownloadStatus('')
   const assetid = getDownloadImageText()
   if (!assetid) {
     setDownloadStatus('Enter asset id to start!')
